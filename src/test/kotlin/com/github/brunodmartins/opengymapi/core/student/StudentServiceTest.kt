@@ -1,6 +1,7 @@
 package com.github.brunodmartins.opengymapi.core.student
 
 import com.github.brunodmartins.opengymapi.core.student.StudentOM.Companion.student
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -36,4 +37,21 @@ class StudentServiceTest {
         `when`(repository.save(student())).thenThrow(RuntimeException())
         assertThrows<RuntimeException>{ service.save(student()) }
     }
+
+    @Test
+    @DisplayName("Get student")
+    fun getStudent() {
+        val student = student()
+        `when`(repository.getById(student.id)).thenReturn(student)
+        assertEquals(student, service.get(student.id))
+    }
+
+    @Test
+    @DisplayName("Get student fails")
+    fun getStudentError() {
+        val student = student()
+        `when`(repository.getById(student.id)).thenThrow(RuntimeException())
+        assertThrows<RuntimeException>{ service.get(student.id) }
+    }
+
 }

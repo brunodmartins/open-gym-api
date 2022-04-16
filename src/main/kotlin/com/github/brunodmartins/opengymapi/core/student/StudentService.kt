@@ -13,4 +13,6 @@ class StudentService {
     fun save(student: Student) {
         repository.save(student)
     }
+
+    fun get(id: Long) = repository.getById(id)
 }
