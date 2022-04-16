@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 import java.util.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/student")
@@ -16,7 +17,7 @@ class StudentController {
     lateinit var service: StudentService
 
     @PostMapping
-    fun postStudent(@RequestBody student: Student): ResponseEntity<Student> {
+    fun postStudent(@Valid @RequestBody student: Student): ResponseEntity<Student> {
         service.save(student)
         return ResponseEntity<Student>(student, HttpStatus.CREATED)
     }
