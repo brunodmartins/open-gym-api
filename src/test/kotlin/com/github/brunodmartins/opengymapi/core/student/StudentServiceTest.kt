@@ -1,6 +1,7 @@
 package com.github.brunodmartins.opengymapi.core.student
 
 import com.github.brunodmartins.opengymapi.core.student.StudentOM.Companion.student
+import com.github.brunodmartins.opengymapi.core.domain.dto.storage.StudentRecord
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -28,13 +29,13 @@ class StudentServiceTest {
     @DisplayName("Save student successfully")
     fun saveStudent() {
         service.save(student())
-        verify(repository, atLeastOnce()).save(ArgumentMatchers.eq(student()))
+        verify(repository, atLeastOnce()).save(ArgumentMatchers.eq(StudentRecord.fromStudent(student())))
     }
 
     @Test
     @DisplayName("Save student fails")
     fun saveStudentError() {
-        `when`(repository.save(student())).thenThrow(RuntimeException())
+        `when`(repository.save(StudentRecord.fromStudent(student()))).thenThrow(RuntimeException())
         assertThrows<RuntimeException>{ service.save(student()) }
     }
 
@@ -42,7 +43,7 @@ class StudentServiceTest {
     @DisplayName("Get student")
     fun getStudent() {
         val student = student()
-        `when`(repository.getById(student.id)).thenReturn(student)
+        `when`(repository.getById(student.id)).thenReturn(StudentRecord.fromStudent(student()))
         assertEquals(student, service.get(student.id))
     }
 

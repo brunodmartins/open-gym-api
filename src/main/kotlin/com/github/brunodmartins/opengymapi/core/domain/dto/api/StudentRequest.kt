@@ -1,7 +1,6 @@
-package com.github.brunodmartins.opengymapi.core.student.dto.api
+package com.github.brunodmartins.opengymapi.core.domain.dto.api
 
 import com.github.brunodmartins.opengymapi.core.domain.Student
-import com.googlecode.jmapper.annotations.JMap
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import javax.validation.constraints.Min
@@ -23,4 +22,8 @@ data class StudentRequest (
     @field:ApiModelProperty("weight")
     @field:Min(value = 1, message = "Minimum weight required is 1")
     val weight: Float,
-)
+){
+    fun toStudent() : Student {
+        return Student(0, name, age, weight)
+    }
+}
