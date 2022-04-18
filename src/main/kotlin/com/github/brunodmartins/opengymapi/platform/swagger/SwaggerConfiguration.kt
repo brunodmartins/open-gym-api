@@ -1,7 +1,10 @@
 package com.github.brunodmartins.opengymapi.platform.swagger
 
+import io.swagger.annotations.ApiModel
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import springfox.documentation.builders.ApiInfoBuilder
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
@@ -11,6 +14,7 @@ import springfox.documentation.service.Contact
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
+import java.util.function.Predicate
 
 
 @Configuration
@@ -23,7 +27,10 @@ class SwaggerConfiguration {
         return Docket(DocumentationType.SWAGGER_2)
             .groupName("business-api")
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.github.brunodmartins.opengymapi.core"))
+            .apis(
+                RequestHandlerSelectors.withClassAnnotation(RestController::class.java)
+                .or(RequestHandlerSelectors.withClassAnnotation(ApiModel::class.java))
+            )
             .build()
             .apiInfo(apiInfo())
     }
