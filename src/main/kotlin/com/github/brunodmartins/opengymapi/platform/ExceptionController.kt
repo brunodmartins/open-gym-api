@@ -16,11 +16,11 @@ class ExceptionController : ResponseEntityExceptionHandler() {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun entityNotFoundException(exception: EntityNotFoundException): ResponseEntity<ErrorMessage> {
         val message = exception.message
-        val clazz = message?.substring(message.indexOf(".domain.") + 8, message.indexOf("with id") - 1);
+        val clazz = message?.substring(message.indexOf(".domain.") + 8, message.indexOf("with id") - 1)
         val id = message?.substring(message.lastIndexOf(" ") + 1)
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
             ErrorMessage("Resource not found", "$clazz - $id", HttpStatus.NOT_FOUND.value())
-        );
+        )
     }
 
     companion object {
