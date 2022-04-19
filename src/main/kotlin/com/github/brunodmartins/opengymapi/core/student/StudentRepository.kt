@@ -1,6 +1,6 @@
 package com.github.brunodmartins.opengymapi.core.student
 
-import com.github.brunodmartins.opengymapi.core.domain.dto.storage.StudentRecord
+import com.github.brunodmartins.opengymapi.core.domain.Student
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface StudentRepository : JpaRepository<StudentRecord, Long>
+interface StudentRepository : JpaRepository<Student, Long>
