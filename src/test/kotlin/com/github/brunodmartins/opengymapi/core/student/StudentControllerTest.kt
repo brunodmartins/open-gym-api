@@ -54,6 +54,7 @@ class StudentControllerTest : BaseControllerTest() {
         """{"name": "a"}""",
         """{"name": "Test", "age": 0}""",
         """{"name": "Test", "weight": 0}""",
+        """{"name": "Test", "weight": 1, "age": 1, "gender": "x"}""",
     ])
     fun saveStudentBadRequest(body: String){
         val uri = "/student"

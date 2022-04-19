@@ -1,19 +1,29 @@
 package com.github.brunodmartins.opengymapi.core.domain.dto.storage
 
+import com.github.brunodmartins.opengymapi.core.domain.Gender
 import com.github.brunodmartins.opengymapi.core.domain.Student
 import javax.persistence.*
 
 @Entity
 @Table(name="student")
-data class StudentRecord  (
+data class StudentRecord(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = 0L, val name: String, val age: Int, val weight: Float) {
+    var id: Long = 0L,
 
-    fun toStudent() = Student(id,name,age,weight)
+    val name: String,
+
+    val age: Int,
+
+    val weight: Float,
+
+    val gender: String,
+    ) {
+
+    fun toStudent() = Student(id,name,age,weight, Gender.valueOf(gender))
 
     companion object {
-        fun fromStudent(student: Student) = StudentRecord(student.id, student.name, student.age, student.weight)
+        fun fromStudent(student: Student) = StudentRecord(student.id, student.name, student.age, student.weight, student.gender.name)
     }
 
 }
