@@ -1,6 +1,5 @@
 package com.github.brunodmartins.opengymapi.core.student
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.brunodmartins.opengymapi.BaseControllerTest
 import com.github.brunodmartins.opengymapi.core.student.StudentOM.Companion.student
 import org.junit.jupiter.api.BeforeEach
@@ -17,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.util.ReflectionTestUtils
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
@@ -35,13 +35,13 @@ class StudentControllerTest : BaseControllerTest() {
     }
 
     @Test
-    @DisplayName("POST - /student - 200")
+    @DisplayName("POST - /student - 201")
     fun saveStudentOK(){
         val uri = "/student"
         mvc.perform(MockMvcRequestBuilders
             .post(uri)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(ObjectMapper().writeValueAsBytes(student()))
+            .content(toJson(student()))
         ).andExpect(status().isCreated)
         verify(service, atLeastOnce()).save(student())
     }
@@ -63,5 +63,17 @@ class StudentControllerTest : BaseControllerTest() {
             .contentType(MediaType.APPLICATION_JSON)
             .content(body)
         ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    @DisplayName("GET - /student/1 - 200")
+    fun getStudentOK() {
+        val uri = "/student/1"
+        `when`(service.get(1)).thenReturn(student())
+        mvc.perform(MockMvcRequestBuilders
+            .get(uri)
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+        .andExpect(content().json(toJson(student())))
     }
 }

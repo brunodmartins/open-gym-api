@@ -1,5 +1,6 @@
 package com.github.brunodmartins.opengymapi
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.web.WebAppConfiguration
@@ -17,5 +18,9 @@ abstract class BaseControllerTest {
     @BeforeEach
     protected fun setUp() {
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
+    }
+
+    fun <T: Any>  toJson(value: T): String {
+        return ObjectMapper().writeValueAsString(value)
     }
 }
