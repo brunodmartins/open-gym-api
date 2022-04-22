@@ -9,7 +9,7 @@ data class Training(
     val id: Long = 0L,
     val type: String,
 
-    @OneToMany(mappedBy="training")
+    @OneToMany
     val exercises: List<TrainingExercise>,
 ) {
 
@@ -20,8 +20,6 @@ data class Training(
             @Id
             @GeneratedValue
             val id: Long = 0L,
-            @ManyToOne
-            val training: Training,
             @OneToOne
             val exercise: Exercise,
             val sets: Int,
