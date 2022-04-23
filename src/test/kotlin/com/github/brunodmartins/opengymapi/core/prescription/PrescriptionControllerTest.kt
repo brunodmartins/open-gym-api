@@ -32,13 +32,9 @@ class PrescriptionControllerTest : BaseControllerTest(){
     @Mock
     lateinit var prescriptionService: PrescriptionService
 
-    @Mock
-    lateinit var studentService: StudentService
-
     @BeforeEach
     fun setupMock() {
         ReflectionTestUtils.setField(controller, "prescriptionService", prescriptionService)
-        ReflectionTestUtils.setField(controller, "studentService", studentService)
     }
 
     @Test
@@ -54,22 +50,6 @@ class PrescriptionControllerTest : BaseControllerTest(){
             .content(toJson(request))
         ).andExpect(MockMvcResultMatchers.status().isCreated)
         verify(prescriptionService, atLeastOnce()).createPrescription(1, prescription.beginDate, prescription.endDate)
-    }
-
-    @Test
-    @DisplayName("POST - /prescription - 404 - Student Not found")
-    @Disabled
-    fun createPrescriptionFailsByStudent() {
-        val prescription = emptyPrescription()
-        val uri = "/prescription"
-        val request = PrescriptionCreationRequest(1, prescription.beginDate, prescription.endDate)
-        `when`(studentService.get(1)).thenThrow(EntityNotFoundException())
-        mvc.perform(
-            MockMvcRequestBuilders
-                .post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request))
-        ).andExpect(MockMvcResultMatchers.status().isNotFound)
     }
 
     @ParameterizedTest

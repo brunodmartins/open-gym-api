@@ -1,6 +1,7 @@
 package com.github.brunodmartins.opengymapi.core.student
 
 import com.github.brunodmartins.opengymapi.BaseControllerTest
+import com.github.brunodmartins.opengymapi.core.student.StudentOM.Companion.newStudent
 import com.github.brunodmartins.opengymapi.core.student.StudentOM.Companion.student
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -41,9 +42,9 @@ class StudentControllerTest : BaseControllerTest() {
         mvc.perform(MockMvcRequestBuilders
             .post(uri)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(toJson(student()))
+            .content(toJson(newStudent()))
         ).andExpect(status().isCreated)
-        verify(service, atLeastOnce()).save(student())
+        verify(service, atLeastOnce()).save(newStudent())
     }
 
     @ParameterizedTest
