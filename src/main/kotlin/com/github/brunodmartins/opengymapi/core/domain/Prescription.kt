@@ -3,6 +3,7 @@ package com.github.brunodmartins.opengymapi.core.domain
 import java.time.LocalDate
 import java.util.*
 import javax.persistence.*
+import kotlin.collections.ArrayList
 
 @Entity
 data class Prescription(
@@ -18,7 +19,7 @@ data class Prescription(
     val endDate: LocalDate,
 
     @OneToMany
-    val training: List<Training> = Collections.emptyList(),
+    val training: MutableList<Training> = mutableListOf(),
 
     val presence: Int = 0,
 

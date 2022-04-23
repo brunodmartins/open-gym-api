@@ -1,15 +1,9 @@
 package com.github.brunodmartins.opengymapi.core.domain.dto.api
 
+import com.github.brunodmartins.opengymapi.core.domain.dto.TrainingExerciseDTO
+
 data class TrainingCreationRequest(
     val type: String,
-    val exercises: List<TrainingExerciseRequest>,
+    val exercises: List<TrainingExerciseDTO>,
 ) {
-    companion object {
-
-        data class TrainingExerciseRequest(
-            val exerciseId: Long,
-            val reps: Long,
-            val sets: Long
-        )
-    }
 }

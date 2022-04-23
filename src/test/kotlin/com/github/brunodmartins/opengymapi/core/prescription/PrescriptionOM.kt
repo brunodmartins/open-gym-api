@@ -36,7 +36,7 @@ class PrescriptionOM {
                 beginDate = LocalDate.now(),
                 endDate = LocalDate.now().plusMonths(2),
                 presence = 2,
-                training = listOf(trainingA, trainingB),
+                training = mutableListOf(trainingA, trainingB),
                 lastTraining = trainingB,
                 lastPresence = LocalDate.now()
             )
