@@ -15,12 +15,15 @@ abstract class BaseControllerTest {
     @Autowired
     private lateinit var webApplicationContext: WebApplicationContext
 
+    @Autowired
+    lateinit var objectMapper: ObjectMapper
+
     @BeforeEach
     protected fun setUp() {
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
     }
 
     fun <T: Any>  toJson(value: T): String {
-        return ObjectMapper().writeValueAsString(value)
+        return objectMapper.writeValueAsString(value)
     }
 }
