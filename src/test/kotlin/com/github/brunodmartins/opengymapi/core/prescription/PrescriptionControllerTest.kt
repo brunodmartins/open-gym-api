@@ -1,7 +1,9 @@
 package com.github.brunodmartins.opengymapi.core.prescription
 
 import com.github.brunodmartins.opengymapi.BaseControllerTest
+import com.github.brunodmartins.opengymapi.core.domain.dto.TrainingExerciseDTO
 import com.github.brunodmartins.opengymapi.core.domain.dto.api.PrescriptionCreationRequest
+import com.github.brunodmartins.opengymapi.core.domain.dto.api.TrainingCreationRequest
 import com.github.brunodmartins.opengymapi.core.prescription.PrescriptionOM.Companion.emptyPrescription
 import com.github.brunodmartins.opengymapi.core.student.StudentService
 import org.junit.jupiter.api.BeforeEach
@@ -68,6 +70,62 @@ class PrescriptionControllerTest : BaseControllerTest(){
                 .post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest)
+    }
+
+    @Test
+    @DisplayName("POST - /prescription/1/training - 201")
+    fun addTrainingOK() {
+        val prescription = emptyPrescription()
+        val prescriptionId = 1L
+        val uri = "/prescription/$prescriptionId/training"
+        val request = TrainingCreationRequest("A", exercises = listOf(TrainingExerciseDTO(1, 20, 3)))
+        `when`(prescriptionService.get(prescriptionId)).thenReturn(prescription)
+        mvc.perform(
+            MockMvcRequestBuilders
+                .post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+        ).andExpect(MockMvcResultMatchers.status().isCreated)
+        verify(prescriptionService, atLeastOnce()).addTraining(prescription, request.type, request.exercises)
+    }
+
+    @Test
+    @DisplayName("POST - /prescription/1/training - 404 - Prescription not found")
+    fun addTrainingFailsNotFound() {
+        val prescriptionId = 1L
+        val uri = "/prescription/$prescriptionId/training"
+        val request = TrainingCreationRequest("A", exercises = listOf(TrainingExerciseDTO(1, 20, 3)))
+        `when`(prescriptionService.get(prescriptionId)).thenThrow(EntityNotFoundException())
+        mvc.perform(
+            MockMvcRequestBuilders
+                .post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+        ).andExpect(MockMvcResultMatchers.status().isNotFound)
+    }
+
+    @ParameterizedTest
+    @DisplayName("POST - /prescription/1/training - 400")
+    @ValueSource(strings = [
+        """{}""",
+        """{"type": "A"}""",
+        """{"type": "A", "exercises": []}""",
+        """{"type": "A", "exercises": [{"exerciseId":0}]}""",
+        """{"type": "A", "exercises": [{"exerciseId":0, "reps": 0}]}""",
+        """{"type": "A", "exercises": [{"exerciseId":0, "reps": 0, "sets":0}]}""",
+        """{"type": "A", "exercises": [{"exerciseId":1, "reps": 0, "sets":0}]}""",
+        """{"type": "A", "exercises": [{"exerciseId":1, "reps": 1, "sets":0}]}""",
+        """{"type": "A", "exercises": [{"exerciseId":1, "reps": 0, "sets":1}]}""",
+    ])
+    fun addTrainingFailsBadRequest(content: String) {
+        val prescriptionId = 1L
+        val uri = "/prescription/$prescriptionId/training"
+       mvc.perform(
+            MockMvcRequestBuilders
+                .post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
         ).andExpect(MockMvcResultMatchers.status().isBadRequest)
     }
 }
